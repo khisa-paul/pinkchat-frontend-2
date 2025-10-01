@@ -10,6 +10,7 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen flex items-center justify-center bg-pink-100">
+        {/* Centered White Box */}
         <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl">
           <Routes>
             <Route path="/" element={<Login />} />
