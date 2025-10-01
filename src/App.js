@@ -8,7 +8,7 @@ import StatusViewer from "./components/StatusViewer";
 import { API_BASE } from "./config";
 import io from "socket.io-client";
 
-// Connect socket.io to Render backend
+// Connect socket.io to backend
 const socket = io(API_BASE, { transports: ["websocket"], withCredentials: true });
 
 function App() {
