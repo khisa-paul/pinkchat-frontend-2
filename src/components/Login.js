@@ -1,50 +1,65 @@
+// src/components/Login.js
 import React, { useState } from "react";
+import axios from "axios";
+import { API_BASE } from "../config";
 
-const Login = () => {
-  const [formData, setFormData] = useState({ username: "", phone: "" });
+function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Login Data:", formData);
+    try {
+      const res = await axios.post(`${API_BASE}/login`, { username, password });
+      alert("Login successful for " + res.data.user.username);
+    } catch (err) {
+      alert("Login failed: " + err.message);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-pink-100 px-4">
-      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-pink-600 mb-6">
+    <div>
+      <h2 className="text-2xl font-bold text-center text-pink-600 mb-6">
+        PinkChat Login
+      </h2>
+      <form onSubmit={handleLogin} className="space-y-4">
+        <input
+          type="text"
+          placeholder="Username"
+          className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button
+          type="submit"
+          className="w-full bg-pink-600 text-white py-2 rounded-xl hover:bg-pink-700"
+        >
           Login
-        </h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={formData.username}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"
-          />
-          <input
-            type="tel"
-            name="phone"
-            placeholder="Phone Number"
-            value={formData.phone}
-            onChange={handleChange}
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"
-          />
-          <button
-            type="submit"
-            className="w-full bg-pink-500 text-white py-3 rounded-lg hover:bg-pink-600 transition"
-          >
-            Login
-          </button>
-        </form>
-      </div>
+        </button>
+      </form>
+
+      <p className="text-center mt-4">
+        Don’t have an account?{" "}
+        <a href="/register" className="text-pink-600 hover:underline">
+          Register
+        </a>
+      </p>
+      <p className="text-center mt-2">
+        <a href="/forgot-password" className="text-pink-600 hover:underline">
+          Forgot Password?
+        </a>
+      </p>
     </div>
   );
-};
+}
 
 export default Login;
