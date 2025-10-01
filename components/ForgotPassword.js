@@ -8,22 +8,32 @@ function ForgotPassword({ setView }) {
   const handleForgot = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${API_BASE}/api/forgot-password`, { phone });
-      alert("Check your phone/email for reset instructions");
+      await axios.post(`${API_BASE}/forgot-password`, { phone });
+      alert("Password reset link sent via SMS (if registered).");
       setView("login");
     } catch (err) {
-      alert(err.response?.data?.message || "Error resetting password");
+      alert("Failed: " + err.message);
     }
   };
 
   return (
-    <div className="forgot">
+    <div className="forgot-form">
       <h2>Forgot Password</h2>
       <form onSubmit={handleForgot}>
-        <input placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
-        <button type="submit">Reset Password</button>
+        <input
+          type="tel"
+          placeholder="Enter your phone number"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          required
+        />
+        <button type="submit">Send Reset Link</button>
       </form>
-      <button onClick={() => setView("login")}>Back to Login</button>
+      <p>
+        <button type="button" onClick={() => setView("login")}>
+          Back to Login
+        </button>
+      </p>
     </div>
   );
 }
