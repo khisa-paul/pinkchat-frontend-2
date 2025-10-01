@@ -1,32 +1,81 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { API_BASE } from "../config";
+import "./Auth.css";
 
 function Register({ setUser, setView }) {
   const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
     try {
-      const res = await axios.post(`${API_BASE}/api/register`, { username, phone, password });
-      setUser(res.data.user);
+      const res = await axios.post(`${API_BASE}/register`, {
+        username,
+        phone,
+        password,
+      });
+      setUser(res.data.user); // Log user in after registration
     } catch (err) {
-      alert(err.response?.data?.message || "Registration failed");
+      alert("Registration failed: " + err.message);
     }
   };
 
   return (
-    <div className="register">
-      <h2>Register</h2>
-      <form onSubmit={handleRegister}>
-        <input placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-        <input placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
-        <input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button type="submit">Register</button>
-      </form>
-      <button onClick={() => setView("login")}>Back to Login</button>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2 className="auth-title">Create Account</h2>
+        <form onSubmit={handleRegister}>
+          <input
+            type="text"
+            placeholder="Choose a username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+
+          <input
+            type="tel"
+            placeholder="+254712345678"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Confirm password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+
+          <button type="submit" className="login-btn">
+            Register
+          </button>
+        </form>
+
+        <p className="auth-links">
+          Already have an account?{" "}
+          <span onClick={() => setView("login")}>Login</span>
+        </p>
+      </div>
     </div>
   );
 }
