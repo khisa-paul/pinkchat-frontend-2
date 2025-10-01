@@ -1,50 +1,63 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_BASE } from "../config";
 
 function Login() {
-  const navigate = useNavigate();
-  const [form, setForm] = useState({ phone: "", password: "" });
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    alert(`Logging in with: ${form.phone}`);
-    // TODO: Replace with API call
+    try {
+      const res = await axios.post(`${API_BASE}/login`, { username, password });
+      alert("Login successful for " + res.data.user.username);
+    } catch (err) {
+      alert("Login failed: " + err.message);
+    }
   };
 
   return (
-    <div style={{ background: "pink", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-      <form onSubmit={handleSubmit} style={{ background: "white", padding: "20px", borderRadius: "10px", width: "300px" }}>
-        <h2 style={{ textAlign: "center", color: "deeppink" }}>PinkChat Login</h2>
-        <input
-          type="text"
-          name="phone"
-          placeholder="Phone Number"
-          value={form.phone}
-          onChange={handleChange}
-          required
-          style={{ width: "100%", padding: "10px", margin: "10px 0", borderRadius: "5px" }}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-          style={{ width: "100%", padding: "10px", margin: "10px 0", borderRadius: "5px" }}
-        />
-        <button type="submit" style={{ width: "100%", padding: "10px", background: "deeppink", color: "white", border: "none", borderRadius: "5px" }}>
-          Login
-        </button>
-        <p style={{ textAlign: "center", marginTop: "10px" }}>
-          <span onClick={() => navigate("/register")} style={{ color: "blue", cursor: "pointer" }}>Register</span> |{" "}
-          <span onClick={() => navigate("/forgot-password")} style={{ color: "blue", cursor: "pointer" }}>Forgot Password?</span>
+    <div className="min-h-screen flex items-center justify-center bg-pink-100">
+      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center text-pink-600 mb-6">
+          PinkChat Login
+        </h2>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Username"
+            className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button
+            type="submit"
+            className="w-full bg-pink-600 text-white py-2 rounded-xl hover:bg-pink-700"
+          >
+            Login
+          </button>
+        </form>
+        <p className="text-center mt-4">
+          Don’t have an account?{" "}
+          <a href="/register" className="text-pink-600 hover:underline">
+            Register
+          </a>
         </p>
-      </form>
+        <p className="text-center mt-2">
+          <a href="/forgot-password" className="text-pink-600 hover:underline">
+            Forgot Password?
+          </a>
+        </p>
+      </div>
     </div>
   );
 }
