@@ -6,11 +6,13 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-      </Routes>
+      <div className="min-h-screen flex items-center justify-center bg-pink-100">
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        </Routes>
+      </div>
     </Router>
   );
 }
