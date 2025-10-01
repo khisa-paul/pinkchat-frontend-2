@@ -1,35 +1,49 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_BASE } from "../config";
 
 function ForgotPassword() {
-  const navigate = useNavigate();
   const [phone, setPhone] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleForgot = async (e) => {
     e.preventDefault();
-    alert(`Reset link sent to phone: ${phone}`);
-    // TODO: Replace with API call to backend
+    try {
+      await axios.post(`${API_BASE}/forgot-password`, { phone });
+      alert("Password reset link sent to your phone number!");
+    } catch (err) {
+      alert("Failed: " + err.message);
+    }
   };
 
   return (
-    <div style={{ background: "pink", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-      <form onSubmit={handleSubmit} style={{ background: "white", padding: "20px", borderRadius: "10px", width: "300px" }}>
-        <h2 style={{ textAlign: "center", color: "deeppink" }}>Forgot Password</h2>
-        <input
-          type="text"
-          placeholder="Phone Number"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          required
-          style={{ width: "100%", padding: "10px", margin: "10px 0", borderRadius: "5px" }}
-        />
-        <button type="submit" style={{ width: "100%", padding: "10px", background: "deeppink", color: "white", border: "none", borderRadius: "5px" }}>
-          Send Reset Link
-        </button>
-        <p style={{ textAlign: "center", marginTop: "10px" }}>
-          <span onClick={() => navigate("/")} style={{ color: "blue", cursor: "pointer" }}>Back to Login</span>
+    <div className="min-h-screen flex items-center justify-center bg-pink-100">
+      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center text-pink-600 mb-6">
+          Forgot Password
+        </h2>
+        <form onSubmit={handleForgot} className="space-y-4">
+          <input
+            type="tel"
+            placeholder="Enter your phone number"
+            className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+          />
+          <button
+            type="submit"
+            className="w-full bg-pink-600 text-white py-2 rounded-xl hover:bg-pink-700"
+          >
+            Send Reset Link
+          </button>
+        </form>
+        <p className="text-center mt-4">
+          Remembered?{" "}
+          <a href="/" className="text-pink-600 hover:underline">
+            Back to Login
+          </a>
         </p>
-      </form>
+      </div>
     </div>
   );
 }
