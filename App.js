@@ -8,13 +8,14 @@ import StatusViewer from "./components/StatusViewer";
 import { API_BASE } from "./config";
 import io from "socket.io-client";
 
-// Connect socket.io to Render backend
+// Connect socket.io to backend
 const socket = io(API_BASE, { transports: ["websocket"], withCredentials: true });
 
 function App() {
   const [user, setUser] = useState(null); // null = not logged in
   const [view, setView] = useState("login"); // login | register | forgot | chat
 
+  // If no user logged in, show auth screens
   if (!user) {
     return (
       <div className="auth-container">
@@ -25,6 +26,7 @@ function App() {
     );
   }
 
+  // If logged in, show chat screen
   return (
     <div className="app">
       <header className="header">💖 PinkChat</header>
