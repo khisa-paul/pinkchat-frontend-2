@@ -1,3 +1,4 @@
+// src/components/ForgotPassword.js
 import React, { useState } from "react";
 import axios from "axios";
 import { API_BASE } from "../config";
@@ -16,34 +17,33 @@ function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-pink-100">
-      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-pink-600 mb-6">
-          Forgot Password
-        </h2>
-        <form onSubmit={handleForgot} className="space-y-4">
-          <input
-            type="tel"
-            placeholder="Enter your phone number"
-            className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-          />
-          <button
-            type="submit"
-            className="w-full bg-pink-600 text-white py-2 rounded-xl hover:bg-pink-700"
-          >
-            Send Reset Link
-          </button>
-        </form>
-        <p className="text-center mt-4">
-          Remembered?{" "}
-          <a href="/" className="text-pink-600 hover:underline">
-            Back to Login
-          </a>
-        </p>
-      </div>
+    <div>
+      <h2 className="text-2xl font-bold text-center text-pink-600 mb-6">
+        Forgot Password
+      </h2>
+      <form onSubmit={handleForgot} className="space-y-4">
+        <input
+          type="tel"
+          placeholder="Enter your phone number"
+          className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          required
+        />
+        <button
+          type="submit"
+          className="w-full bg-pink-600 text-white py-2 rounded-xl hover:bg-pink-700"
+        >
+          Send Reset Link
+        </button>
+      </form>
+
+      <p className="text-center mt-4">
+        Remembered?{" "}
+        <a href="/" className="text-pink-600 hover:underline">
+          Back to Login
+        </a>
+      </p>
     </div>
   );
 }
