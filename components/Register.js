@@ -3,30 +3,58 @@ import axios from "axios";
 import { API_BASE } from "../config";
 
 function Register({ setUser, setView }) {
-  const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${API_BASE}/api/register`, { username, phone, password });
+      const res = await axios.post(`${API_BASE}/register`, {
+        phone,
+        username,
+        password,
+      });
       setUser(res.data.user);
     } catch (err) {
-      alert(err.response?.data?.message || "Registration failed");
+      alert("Registration failed: " + err.message);
     }
   };
 
   return (
-    <div className="register">
+    <div className="register-form">
       <h2>Register</h2>
       <form onSubmit={handleRegister}>
-        <input placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-        <input placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
-        <input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input
+          type="tel"
+          placeholder="Phone number (e.g. +2547...)"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button type="submit">Register</button>
       </form>
-      <button onClick={() => setView("login")}>Back to Login</button>
+
+      <p>
+        Already have an account?{" "}
+        <button type="button" onClick={() => setView("login")}>
+          Login here
+        </button>
+      </p>
     </div>
   );
 }
