@@ -3,45 +3,27 @@ import axios from "axios";
 import { API_BASE } from "../config";
 import "./Auth.css";
 
-function Register({ setUser, setView }) {
-  const [username, setUsername] = useState("");
+function ForgotPassword({ setView }) {
   const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleRegister = async (e) => {
+  const handleForgotPassword = async (e) => {
     e.preventDefault();
-
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-
     try {
-      const res = await axios.post(`${API_BASE}/register`, {
-        username,
+      const res = await axios.post(`${API_BASE}/forgot-password`, {
         phone,
-        password,
       });
-      setUser(res.data.user); // Log user in after registration
+      setMessage(res.data.message || "If this number is registered, you’ll get reset instructions.");
     } catch (err) {
-      alert("Registration failed: " + err.message);
+      setMessage("Failed to process request: " + err.message);
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2 className="auth-title">Create Account</h2>
-        <form onSubmit={handleRegister}>
-          <input
-            type="text"
-            placeholder="Choose a username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-
+        <h2 className="auth-title">Reset Password</h2>
+        <form onSubmit={handleForgotPassword}>
           <input
             type="tel"
             placeholder="+254712345678"
@@ -50,34 +32,20 @@ function Register({ setUser, setView }) {
             required
           />
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-
-          <input
-            type="password"
-            placeholder="Confirm password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-
           <button type="submit" className="login-btn">
-            Register
+            Send Reset Link
           </button>
         </form>
 
+        {message && <p style={{ marginTop: "1rem", color: "green" }}>{message}</p>}
+
         <p className="auth-links">
-          Already have an account?{" "}
-          <span onClick={() => setView("login")}>Login</span>
+          Remembered?{" "}
+          <span onClick={() => setView("login")}>Back to Login</span>
         </p>
       </div>
     </div>
   );
 }
 
-export default Register;
+export default ForgotPassword;
