@@ -1,33 +1,32 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { API_BASE } from "../config";
 
-function Login({ setUser, setView }) {
-  const [phone, setPhone] = useState("");
+export default function Login() {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post(`${API_BASE}/api/login`, { phone, password });
-      setUser(res.data.user); // assuming backend returns user object
-    } catch (err) {
-      alert(err.response?.data?.message || "Login failed");
-    }
+    console.log("Logging in:", username);
   };
 
   return (
-    <div className="login">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
-        <input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+    <div className="login-page">
+      <h2>PinkChat Login</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <button type="submit">Login</button>
       </form>
-      <button onClick={() => setView("register")}>Register</button>
-      <button onClick={() => setView("forgot")}>Forgot Password</button>
     </div>
   );
 }
-
-export default Login;
