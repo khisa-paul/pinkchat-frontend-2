@@ -1,78 +1,52 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { API_BASE } from "../config";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const [identifier, setIdentifier] = useState(""); 
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [form, setForm] = useState({ phone: "", password: "" });
 
-  const handleLogin = async (e) => {
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-
-    try {
-      const res = await axios.post(`${API_BASE}/login`, { identifier, password });
-      if (res.data.token) localStorage.setItem("token", res.data.token);
-
-      alert("Login successful for " + res.data.user.username);
-      navigate("/chat");
-    } catch (err) {
-      alert("Login failed: " + (err.response?.data?.message || err.message));
-    }
-
-    setLoading(false);
+    alert(`Logging in with: ${form.phone}`);
+    // TODO: Replace with API call
   };
 
   return (
-    <div className="bg-white p-8 rounded-2xl shadow-xl w-96 mx-auto mt-20">
-      <h2 className="text-2xl font-bold text-center text-pink-600 mb-6">
-        PinkChat Login
-      </h2>
-      <form onSubmit={handleLogin} className="space-y-4">
+    <div style={{ background: "pink", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <form onSubmit={handleSubmit} style={{ background: "white", padding: "20px", borderRadius: "10px", width: "300px" }}>
+        <h2 style={{ textAlign: "center", color: "deeppink" }}>PinkChat Login</h2>
         <input
           type="text"
-          placeholder="Username or Phone Number"
-          className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
-          value={identifier}
-          onChange={(e) => setIdentifier(e.target.value)}
+          name="phone"
+          placeholder="Phone Number"
+          value={form.phone}
+          onChange={handleChange}
           required
+          style={{ width: "100%", padding: "10px", margin: "10px 0", borderRadius: "5px" }}
         />
         <input
           type="password"
+          name="password"
           placeholder="Password"
-          className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={form.password}
+          onChange={handleChange}
           required
+          style={{ width: "100%", padding: "10px", margin: "10px 0", borderRadius: "5px" }}
         />
-        <button
-          type="submit"
-          className={`w-full py-2 rounded-xl text-white ${
-            loading ? "bg-pink-400" : "bg-pink-600 hover:bg-pink-700"
-          }`}
-          disabled={loading}
-        >
-          {loading ? "Logging in..." : "Login"}
+        <button type="submit" style={{ width: "100%", padding: "10px", background: "deeppink", color: "white", border: "none", borderRadius: "5px" }}>
+          Login
         </button>
+        <p style={{ textAlign: "center", marginTop: "10px" }}>
+          <span onClick={() => navigate("/register")} style={{ color: "blue", cursor: "pointer" }}>Register</span> |{" "}
+          <span onClick={() => navigate("/forgot-password")} style={{ color: "blue", cursor: "pointer" }}>Forgot Password?</span>
+        </p>
       </form>
-
-      <p className="text-center mt-4">
-        Don’t have an account?{" "}
-        <a href="/register" className="text-pink-600 hover:underline">
-          Register
-        </a>
-      </p>
-      <p className="text-center mt-2">
-        <a href="/forgot-password" className="text-pink-600 hover:underline">
-          Forgot Password?
-        </a>
-      </p>
     </div>
   );
 }
 
 export default Login;
-
