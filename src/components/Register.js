@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { API_BASE } from "../../config"; // adjust relative path
+import { API_BASE } from "../../config";
 import { useNavigate } from "react-router-dom";
 
-function RegisterPage() {
+function Register() {
   const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +17,7 @@ function RegisterPage() {
     try {
       await axios.post(`${API_BASE}/register`, { username, phone, password });
       alert("Registration successful! Please login.");
-      navigate("/"); // redirect to login page
+      navigate("/"); // redirect to login
     } catch (err) {
       alert("Registration failed: " + (err.response?.data?.message || err.message));
     }
@@ -76,4 +76,4 @@ function RegisterPage() {
   );
 }
 
-export default RegisterPage;
+export default Register;
