@@ -1,46 +1,50 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { API_BASE } from "../config";
-import "./Auth.css";
 
-function ForgotPassword({ setView }) {
+function ForgotPasswordPage() {
   const [phone, setPhone] = useState("");
 
   const handleForgot = async (e) => {
     e.preventDefault();
     try {
       await axios.post(`${API_BASE}/forgot-password`, { phone });
-      alert("Password reset instructions sent to your phone.");
-      setView("login");
+      alert("Password reset link sent to your phone number!");
     } catch (err) {
-      alert("Request failed: " + err.message);
+      alert("Failed: " + err.message);
     }
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h2 className="auth-title">Reset Password</h2>
-        <form onSubmit={handleForgot}>
-          <input
-            type="tel"
-            placeholder="+254712345678"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            pattern="^\+?[1-9]\d{7,14}$"
-            required
-          />
-          <button type="submit" className="auth-btn">
-            Send Reset Link
-          </button>
-        </form>
+    <div className="bg-white p-8 rounded-2xl shadow-xl w-96">
+      <h2 className="text-2xl font-bold text-center text-pink-600 mb-6">
+        Forgot Password
+      </h2>
+      <form onSubmit={handleForgot} className="space-y-4">
+        <input
+          type="tel"
+          placeholder="Enter your phone number"
+          className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          required
+        />
+        <button
+          type="submit"
+          className="w-full bg-pink-600 text-white py-2 rounded-xl hover:bg-pink-700"
+        >
+          Send Reset Link
+        </button>
+      </form>
 
-        <p className="auth-links">
-          Back to <span onClick={() => setView("login")}>Login</span>
-        </p>
-      </div>
+      <p className="text-center mt-4">
+        Remembered?{" "}
+        <a href="/" className="text-pink-600 hover:underline">
+          Back to Login
+        </a>
+      </p>
     </div>
   );
 }
 
-export default ForgotPassword;
+export default ForgotPasswordPage;
