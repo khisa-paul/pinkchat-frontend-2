@@ -3,29 +3,54 @@ import axios from "axios";
 import { API_BASE } from "../config";
 
 function Login({ setUser, setView }) {
-  const [phone, setPhone] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${API_BASE}/api/login`, { phone, password });
-      setUser(res.data.user); // assuming backend returns user object
+      const res = await axios.post(`${API_BASE}/login`, {
+        username,
+        password,
+      });
+      setUser(res.data.user);
     } catch (err) {
-      alert(err.response?.data?.message || "Login failed");
+      alert("Login failed: " + err.message);
     }
   };
 
   return (
-    <div className="login">
+    <div className="login-form">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
-        <input placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
-        <input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button type="submit">Login</button>
       </form>
-      <button onClick={() => setView("register")}>Register</button>
-      <button onClick={() => setView("forgot")}>Forgot Password</button>
+
+      <p>
+        Don’t have an account?{" "}
+        <button type="button" onClick={() => setView("register")}>
+          Register here
+        </button>
+      </p>
+      <p>
+        <button type="button" onClick={() => setView("forgot")}>
+          Forgot Password?
+        </button>
+      </p>
     </div>
   );
 }
