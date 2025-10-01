@@ -1,58 +1,68 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API_BASE } from "../config";
 
 function Register() {
-  const navigate = useNavigate();
-  const [form, setForm] = useState({ username: "", phone: "", password: "" });
+  const [username, setUsername] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    alert(`Registering: ${form.username}, ${form.phone}`);
-    // TODO: Replace with API call
+    try {
+      await axios.post(`${API_BASE}/register`, { username, phone, password });
+      alert("Registration successful! Please login.");
+      window.location.href = "/";
+    } catch (err) {
+      alert("Registration failed: " + err.message);
+    }
   };
 
   return (
-    <div style={{ background: "pink", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-      <form onSubmit={handleSubmit} style={{ background: "white", padding: "20px", borderRadius: "10px", width: "300px" }}>
-        <h2 style={{ textAlign: "center", color: "deeppink" }}>Register</h2>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={form.username}
-          onChange={handleChange}
-          required
-          style={{ width: "100%", padding: "10px", margin: "10px 0", borderRadius: "5px" }}
-        />
-        <input
-          type="text"
-          name="phone"
-          placeholder="Phone Number"
-          value={form.phone}
-          onChange={handleChange}
-          required
-          style={{ width: "100%", padding: "10px", margin: "10px 0", borderRadius: "5px" }}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-          style={{ width: "100%", padding: "10px", margin: "10px 0", borderRadius: "5px" }}
-        />
-        <button type="submit" style={{ width: "100%", padding: "10px", background: "deeppink", color: "white", border: "none", borderRadius: "5px" }}>
+    <div className="min-h-screen flex items-center justify-center bg-pink-100">
+      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center text-pink-600 mb-6">
           Register
-        </button>
-        <p style={{ textAlign: "center", marginTop: "10px" }}>
-          <span onClick={() => navigate("/")} style={{ color: "blue", cursor: "pointer" }}>Back to Login</span>
+        </h2>
+        <form onSubmit={handleRegister} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Choose Username"
+            className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="tel"
+            placeholder="Phone Number (with country code e.g. +2547...)"
+            className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button
+            type="submit"
+            className="w-full bg-pink-600 text-white py-2 rounded-xl hover:bg-pink-700"
+          >
+            Register
+          </button>
+        </form>
+        <p className="text-center mt-4">
+          Already have an account?{" "}
+          <a href="/" className="text-pink-600 hover:underline">
+            Login
+          </a>
         </p>
-      </form>
+      </div>
     </div>
   );
 }
