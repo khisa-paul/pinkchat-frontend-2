@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import { API_BASE } from "../config";
 
+
 function Register() {
   const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
@@ -72,3 +72,4 @@ function Register() {
 }
 
 export default Register;
+
